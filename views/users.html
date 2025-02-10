@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            /*去除边框*/
+            border: none;
+            /*去除文字被选中*/
+            user-select: none;
+        }
+
+        a {
+            padding: 0px;
+            margin: 0px;
+            text-decoration: none;
+            color: #000000;
+        }
+        /*修改信息*/
+        .modify {
+            display: none;
+            width: 512px;
+            height: 280px;
+            position: fixed;
+            border: #ebebeb solid 1px;
+            left: 50%;
+            top: 50%;
+            background:#ffffff;
+            box-shadow: 0px 0px 20px #ddd;
+            z-index: 9999;
+            transform: translate(-50% , -50%);
+        }
+
+        .modify-title {
+            width: 100%;
+            margin: 10px 0px 0px 0px;
+            text-align: center;
+            line-height: 40px;
+            height: 40px;
+            font-size: 18px;
+            position: relative;
+            /*cursor: move;*/
+        }
+
+        .modify-input-content {
+            margin-top: 20px;
+        }
+
+        .modify-button {
+            width: 50%;
+            margin: 30px auto 0px auto;
+            line-height: 40px;
+            font-size: 14px;
+            border: #ebebeb 1px solid;
+            text-align: center;
+        }
+
+        .modify-bg {
+            display: none;
+            width: 100%;
+            height: 100%;
+            position: fixed ;
+            top: 0px;
+            left: 0px;
+            background: rgba(0,0,0,.3);
+        }
+
+        .modify-input input.list-input {
+            float: left;
+            height: 35px;
+            width: 350px;
+            border: #ebebeb 1px solid;
+            text-indent: 5px;
+            line-height: 35px;
+        }
+
+        .modify-input {
+            overflow: hidden;
+            margin: 0px 0px 20px 0px;
+        }
+
+        .modify-input label {
+            float: left;
+            width: 90px;
+            padding-right: 10px;
+            text-align: right;
+            line-height: 35px;
+            height: 35px;
+            font-size: 14px;
+        }
+
+        .closeBtn {
+            position: absolute;
+            font-size: 12px;
+            /*height: -20px;*/
+            top: -10px;
+            right: -10px;
+            background: #ffffff;
+            border: #ebebeb solid 1px;
+            width: 20px;
+            height: 20px;
+            border-radius: 20px;
+            line-height: 20px;
+            text-align: center;
+        }
+
+        .cursor {
+            cursor: pointer;
+        }
+
+        .user-list {
+            position: absolute;
+            width: 1450px;
+            height: 500px;
+            top: 100px;
+            /*background-color: green;*/
+        }
+
+        .user-li {
+            line-height: 40px;
+            padding-left: 28px;
+            border-bottom: 2px solid #ccc;
+            /*background-color: aqua;*/
+        }
+
+        .li-modify-btn {
+            margin: 2px 2px;
+            padding: 2px 5px;
+            color: #fff;
+            background-color: #ffb800;
+            border-radius: 10%;
+        }
+
+        .li-delete-btn {
+            margin: 2px 2px;
+            padding: 2px 5px;
+            color: #fff;
+            background-color: #ff5722;
+            border-radius: 10%;
+        }
+        /*删除信息*/
+
+        .delete {
+            display: none;
+            width: 500px;
+            height: 125px;
+            position: fixed;
+            border: #ebebeb solid 1px;
+            left: 50%;
+            top: 50%;
+            background: #fff;
+            box-shadow: 0 0 20px #ddd;
+            z-index: 999;
+            transform: translate(-50%,-50%);
+        }
+
+        .delete-button {
+            position: absolute;
+            width: 50px;
+            height: 25px;
+            top: 90px;
+            left: 350px;
+            line-height: 25px;
+            font-size: 12px;
+            border: #ebebeb 1px solid;
+            text-align: center;
+        }
+
+        .delete-closeButton {
+            position: absolute;
+            width: 50px;
+            height: 25px;
+            top: 90px;
+            left: 425px;
+            line-height: 25px;
+            font-size: 12px;
+            border: #ebebeb 1px solid;
+            text-align: center;
+        }
+
+        .delete-text {
+            font-size: 18px;
+            padding-left: 30px;
+            line-height: 60px;
+        }
+
+        .limit>button {
+            /*float: right;*/
+            display: inline-block;
+            background-color: #ccc;
+            margin:10px 10px 0 10px;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .search {
+            position: absolute;
+            line-height: 98px;
+            left: 575px;
+            font-weight: 500;
+            color: black;
+        }
+
+        .search-username {
+            width: 180px;
+            height: 48px;
+            border: solid 1px #f3f3f3;
+        }
+
+        .search-button {
+            width: 50px;
+            height: 38px;
+            background-color: #1e9fff;
+            color: #fff;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+<div class="search">
+    <div>搜索用户名: &nbsp&nbsp<input type="text" id="search-username" name="username" class="search-username">
+        <button type="button" id="search-button" class="search-button">搜索</button>
+    </div>
+</div>
+<div class="user-list">
+    <h1 style="border-bottom: 2px solid #ccc">用户管理</h1>
+    <ul id="user-list"></ul>
+    <div class="limit">
+        <button id="previousPage">上一页</button>
+        <button id="nextPage">下一页</button>
+        <span>共&nbsp{{.count}}&nbsp条</span>
+        <select style="width: 70px;height: 20px;background-color: #cccccc;margin:0 0 0 5px">
+            <option id="countPage" selected></option>
+        </select>
+    </div>
+</div>
+{{/*修改信息*/}}
+<div id="modify" class="modify">
+    <div id="title" class="modify-title">修改信息</div>
+    <span class="cursor"><a id="modify-closeBtn" class="closeBtn">╳</a></span>
+    <div class="modify-input-content">
+        <div class="modify-input">
+            <label>用户名：</label>
+            <input type="text" placeholder="请输入用户名" name="username" id="username" class="list-input">
+        </div>
+        <div class="modify-input">
+            <label>密码：</label>
+            <input type="password" placeholder="请输入登录密码" name="password" id="password" class="list-input">
+        </div>
+    </div>
+    <div id="modifyBtn" class="modify-button"><div>确定修改</div></div>
+</div>
+{{/*删除用户*/}}
+<div id="delete" class="delete">
+    <span class="delete-text">是否需要进行删除用户{{.id}}操作 ?</span>
+    <div id="deleteBtn" class="delete-button">确定</div>
+    <div id="delete-cancelBtn" class="delete-closeButton">取消</div>
+    <span class="cursor"><a id="delete-closeBtn" class="closeBtn">╳</a></span>
+</div>
+
+<!-- 覆盖层 -->
+<div id="bg" class="modify-bg"></div>
+
+<script>
+    var pageNum = 1;
+    const pageSize = 5;
+    document.getElementById('countPage').innerText = pageSize + "条/页";
+    $(document).ready(function () {
+        // 发送AJAX请求到后端获取用户信息
+        $.ajax({
+            url: '/getall', // 后端请求地址
+            type: 'GET',
+            dataType: 'json',
+            contentType: 'application/json',
+            success: function () {
+                $('#previousPage').on('click',function () {
+                    pageNum -= 1;
+                    if (pageNum < 1) {
+                        pageNum = 1;
+                        return
+                    }
+                    Limit();
+                })
+                $('#nextPage').on('click',function () {
+                    pageNum += 1;
+                    var count = {{.count}}
+                    var totalPage = Math.ceil(count / pageSize)
+                    if (pageNum > totalPage) {
+                        pageNum = totalPage
+                        return
+                    }
+                    Limit();
+                })
+                Limit();
+            },
+            error: function (xhr, status, error) {
+                alert("出错了");
+                console.log("Error occurred: " + error);
+            }
+        });
+
+    });
+    function Limit() {
+        $('#user-list').html(" ");
+        $.ajax({
+            url: '/page',
+            type: 'Post',
+            dataType: 'json',
+            contentType:'application/json',
+            data: JSON.stringify({Pagenum: pageNum, PageSize: pageSize}),
+            success: function (data) {
+                $.each(data.data, function (index, user) {
+                    // 遍历添加用户列表
+                    var listItem = $('<li class="user-li">ID: ' + user.Id + ',Name: ' + user.Username + ',</li>');
+                    // 修改用户信息
+                    var editLink = $('<button class="li-modify-btn">编辑</button>').on('click', function () {
+                        alert("修改用户ID: " + user.Id);
+                        var link = document.querySelector('.modify');
+                        var modifyBtn = document.getElementById('modifyBtn');
+                        link.style.display = 'block';
+                        var id = user.Id;
+                        var closeBtn = document.getElementById('modify-closeBtn');
+                        var title = document.querySelector('#title');
+                        // 拖动弹出框
+                        title.addEventListener('mousedown', function (e) {
+                            var x = e.pageX - link.offsetLeft;
+                            var y = e.pageY - link.offsetTop;
+                            document.addEventListener('mousemove', move)
+
+                            function move(e) {
+                                link.style.left = e.pageX - x + 'px';
+                                link.style.top = e.pageY - y + 'px';
+                            }
+
+                            document.addEventListener('mouseup', function () {
+                                document.removeEventListener('mousemove', move);
+                            })
+                        });
+                        closeBtn.addEventListener('click', function () {
+                            link.style.display = 'none';
+                        });
+                        modifyBtn.addEventListener('click', function () {
+                            var username = document.getElementById('username').value;
+                            var password = document.getElementById('password').value;
+                            if (username === "" || password === "") {
+                                alert("用户名或密码不能为空");
+                                return;
+                            }
+                            link.style.display = 'none';
+                            $.ajax({
+                                url: "/updateUser",
+                                type: "PUT",
+                                dataType: 'json',
+                                contentType: 'application/json',
+                                data: JSON.stringify({Id: id, Username: username, Password: password}),
+                                success: function () {
+                                    alert("修改成功");
+                                    window.location.href = "users.html";
+                                }
+                            });
+                        });
+                    });
+                    // 删除用户
+                    var deleteLink = $(' <button class="li-delete-btn">删除</button>').on('click', function () {
+                        var link = document.getElementById('delete');
+                        var deleteBtn = document.getElementById('deleteBtn');
+                        var delete_closeBtn = document.getElementById('delete-closeBtn');
+                        var delete_cancelBtn = document.getElementById('delete-cancelBtn');
+                        link.style.display = 'block';
+                        deleteBtn.addEventListener('click', function () {
+                            $.ajax({
+                                url: "/deleteuser/" + user.Id,
+                                type: "DELETE",
+                                success: function () {
+                                    // 如果删除成功，则移出对应的列表项
+                                    link.style.display = 'none';
+                                    listItem.remove();
+                                }
+                            });
+                        });
+                        delete_cancelBtn.addEventListener('click', function () {
+                            link.style.display = 'none';
+                        });
+                        delete_closeBtn.addEventListener('click', function () {
+                            link.style.display = 'none';
+                        });
+                    });
+                    listItem.append(editLink).append(deleteLink);
+                    $('#user-list').append(listItem);
+                });
+            },
+            error: function (xhr, status, error) {
+                console.log("Error occurred: " + error);
+            }
+        })
+    }
+
+    // 搜索用户姓名
+    $('#search-button').click(function () {
+        var searchName = $('#search-username').val();
+        $.ajax({
+            url:'/searchUsername',
+            type:'POST',
+            dataType: 'json',
+            contentType: 'application/json',
+            data: JSON.stringify({Username:searchName}),
+            success:function (data) {
+                $('#user-list').html(" ");
+                $.each(data,function (index,user) {
+                    var listItem = $('<li class="user-li">ID: ' + user.Id + ',Name: ' + user.Username + ',</li>');
+                    // 修改用户信息
+                    var editLink = $('<button class="li-modify-btn">编辑</button>').on('click', function () {
+                        alert("修改用户ID: " + user.Id);
+                        var link = document.querySelector('.modify');
+                        var modifyBtn = document.getElementById('modifyBtn');
+                        link.style.display = 'block';
+                        var id = user.Id;
+                        var closeBtn = document.getElementById('modify-closeBtn');
+                        var title = document.querySelector('#title');
+                        // 拖动弹出框
+                        title.addEventListener('mousedown', function (e) {
+                            var x = e.pageX - link.offsetLeft;
+                            var y = e.pageY - link.offsetTop;
+                            document.addEventListener('mousemove', move)
+
+                            function move(e) {
+                                link.style.left = e.pageX - x + 'px';
+                                link.style.top = e.pageY - y + 'px';
+                            }
+
+                            document.addEventListener('mouseup', function () {
+                                document.removeEventListener('mousemove', move);
+                            })
+                        });
+                        closeBtn.addEventListener('click', function () {
+                            link.style.display = 'none';
+                        });
+                        modifyBtn.addEventListener('click', function () {
+                            var username = document.getElementById('username').value;
+                            var password = document.getElementById('password').value;
+                            if (username === "" || password === "") {
+                                alert("用户名或密码不能为空");
+                                return;
+                            }
+                            link.style.display = 'none';
+                            $.ajax({
+                                url: "/updateUser",
+                                type: "PUT",
+                                dataType: 'json',
+                                contentType: 'application/json',
+                                data: JSON.stringify({Id: id, Username: username, Password: password}),
+                                success: function () {
+                                    alert("修改成功");
+                                    window.location.href = "users.html";
+                                }
+                            });
+                        });
+                    });
+                    // 删除用户
+                    var deleteLink = $(' <button class="li-delete-btn">删除</button>').on('click', function () {
+                        var link = document.getElementById('delete');
+                        var deleteBtn = document.getElementById('deleteBtn');
+                        var delete_closeBtn = document.getElementById('delete-closeBtn');
+                        var delete_cancelBtn = document.getElementById('delete-cancelBtn');
+                        link.style.display = 'block';
+                        deleteBtn.addEventListener('click', function () {
+                            $.ajax({
+                                url: "/deleteuser/" + user.Id,
+                                type: "DELETE",
+                                success: function () {
+                                    // 如果删除成功，则移出对应的列表项
+                                    link.style.display = 'none';
+                                    listItem.remove();
+                                }
+                            });
+                        });
+                        delete_cancelBtn.addEventListener('click', function () {
+                            link.style.display = 'none';
+                        });
+                        delete_closeBtn.addEventListener('click', function () {
+                            link.style.display = 'none';
+                        });
+                    });
+                    listItem.append(editLink).append(deleteLink);
+                    $('#user-list').append(listItem);
+                });
+            },
+            error:function (xhr,status,err) {
+                console.log("Error = ",err);
+            }
+        })
+    })
+</script>
+</body>
+</html>

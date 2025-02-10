@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>首页</title>
+    <script src="../static/lib/layui/layui.all.js" charset="utf-8"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            user-select: none;
+            border: none;
+            list-style-type: none;
+        }
+
+        a {
+            text-decoration: none;
+            color: #c4c5c9;
+        }
+
+        .container {
+            width: 1674px;
+            height: 864px;
+            position: relative;
+            margin: auto;
+        }
+
+        /*头部*/
+        .header {
+            position: absolute;
+            width: 1674px;
+            height: 74px;
+            margin: auto;
+            background-color: #23262e;
+        }
+
+        .crm-text {
+            width: 220px;
+            height: 74px;
+            font-size: 24px;
+            line-height: 74px;
+            text-align: center;
+            color: #fff;
+        }
+
+        .nav-left {
+            position: absolute;
+            width: 220px;
+            height: 790px;
+            top: 74px;
+            background-color: #393d49;
+        }
+
+        .model-right {
+            position: absolute;
+            width: 1454px;
+            height: 790px;
+            top: 74px;
+            left: 220px;
+            background-color: #fff;
+        }
+
+        .model-right h1 {
+            font-weight: initial;
+            text-align: center;
+            line-height: 790px;
+            font-size: 80px;
+        }
+
+        .animated-text {
+            animation: scaleUpFadeIn 2s;
+            animation-fill-mode: forwards; /* 保留动画结束时的状态 */
+            font-size: 2em; /* 初始字体大小 */
+            opacity: 0; /* 初始透明度 */
+        }
+
+        @keyframes scaleUpFadeIn {
+            from {
+                transform: scale(0); /* 开始时字体大小为0 */
+                opacity: 0; /* 开始时完全透明 */
+            }
+            to {
+                transform: scale(1); /* 结束时字体大小正常 */
+                opacity: 1; /* 结束时完全不透明 */
+            }
+        }
+
+
+        .header-img {
+            position: absolute;
+            left: 50px;
+            top: 10px;
+        }
+
+        .header-icon1 {
+            position: absolute;
+            left: 235px;
+            top: 30px;
+        }
+
+        .header-icon2 {
+            position: absolute;
+            left: 275px;
+            top: 31px;
+        }
+
+        .header-icon3 {
+            position: absolute;
+            left: 315px;
+            top: 30px;
+        }
+
+        .header-icon4 {
+            position: absolute;
+            left: 355px;
+            top: 30px;
+        }
+
+        .header-icon5 {
+            position: absolute;
+            left: 1555px;
+            top: 30px;
+        }
+
+        .header-icon6 {
+            position: absolute;
+            left: 1646px;
+            top: 30px;
+        }
+
+        .header-userlist {
+            position: absolute;
+            left: 1598px;
+            top: 28px;
+        }
+
+        .displayDataTime {
+            position: absolute;
+            top: 30px;
+            left: 830px;
+            color: #fff;
+        }
+
+    /*    左侧导航栏*/
+
+        .nav-title {
+            width: 100%;
+            height: 60px;
+            color: #fff;
+            text-align: center;
+            line-height: 60px;
+            cursor: pointer;
+        }
+        .nav-content1 {
+            width: 100%;
+            height: 100%;
+            background-color: #282b33;
+            border-bottom: solid 1px #31353f;
+        }
+        .nav-content2 {
+            width: 100%;
+            height: 100%;
+            background-color: #282b33;
+            border-bottom: solid 1px #31353f;
+        }
+        .nav-content3 {
+            width: 100%;
+            height: 100%;
+            background-color: #282b33;
+            border-bottom: solid 1px #31353f;
+        }
+        .nav-content4 {
+            width: 100%;
+            height: 100%;
+            background-color: #282b33;
+            border-bottom: solid 1px #31353f;
+        }
+        .nav-content1>a {
+            display: none;
+            height: 40px;
+            width: 100%;
+            color: #ccc;
+            text-align: center;
+            line-height: 40px;
+        }
+        .nav-content2>a {
+            display: none;
+            height: 40px;
+            width: 100%;
+            color: #ccc;
+            text-align: center;
+            line-height: 40px;
+        }
+        .nav-content3>a {
+            display: none;
+            height: 40px;
+            width: 100%;
+            color: #ccc;
+            text-align: center;
+            line-height: 40px;
+        }
+        .nav-content4>a {
+            display: none;
+            height: 40px;
+            width: 100%;
+            color: #ccc;
+            text-align: center;
+            line-height: 40px;
+        }
+        .nav-content1>a:hover {
+            color: #fff;
+            background-color: #55aaff;
+        }
+        .nav-content2>a:hover {
+            color: #fff;
+            background-color: #55aaff;
+        }
+        .nav-content3>a:hover {
+            color: #fff;
+            background-color: #55aaff;
+        }
+        .nav-content4>a:hover {
+            color: #fff;
+            background-color: #55aaff;
+        }
+
+        .nav-content1>a.active {
+            color: #fff;
+            background-color: #55aaff;
+        }
+        .nav-content2>a.active {
+            color: #fff;
+            background-color: #55aaff;
+        }
+        .nav-content3>a.active {
+            color: #fff;
+            background-color: #55aaff;
+        }
+        .nav-content4>a.active {
+            color: #fff;
+            background-color: #55aaff;
+        }
+
+    /*    右侧模块*/
+
+        .model-right {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            /*background-color: red;*/
+        }
+
+        .search {
+            position: absolute;
+            line-height: 98px;
+            left: 575px;
+            font-weight: 500;
+            color: black;
+        }
+
+        .search-user {
+            line-height: 98px;
+            text-align: center;
+            width: 180px;
+            height: 48px;
+            border: solid 1px #f5f5f5;
+        }
+
+        .search-button {
+            width: 50px;
+            height: 38px;
+            background-color: #1e9fff;
+            color: #fff;
+            border-radius: 5px;
+        }
+
+        .x-iframe {
+            position: absolute;
+            /*width: 1420px;*/
+            /*height: 790px;*/
+            width: 100%;
+            height: 100%;
+            /*left: 22px;*/
+            background-color: #fff;
+            /*border: solid 1px #ededed;*/
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+{{/*    头部*/}}
+    <div class="header">
+        <div class="crm-text">CRM管理系统</div>
+        <div class="header-icon">
+            <a href="javascript:;" id="goHome"><img src="../static/img/index/首页.png" class="header-icon1"></a>
+            <img src="../static/img/index/复制.png" class="header-icon2">
+            <img src="../static/img/index/日历.png" class="header-icon3">
+            <img src="../static/img/index/全屏.png" class="header-icon4">
+            <img src="../static/img/index/用户.png" class="header-icon5">
+        </div>
+        <div id="time" class="displayDataTime"><span></span></div>
+        <div class="header-userlist">
+            <select id="mySelect" onchange="handleSelection()">
+                <option>{{.loginUser}}</option>
+                <option>退出登录</option>
+            </select>
+{{/*            <img src="../static/img/index/下拉箭头.png" class="header-icon6">*/}}
+        </div>
+    </div>
+{{/*    左侧导航栏*/}}
+    <div class="nav-left">
+        <div class="nav">
+            <div class="nav-menu">
+                <div class="nav-title" id="nav-title1">客户管理</div>
+                <ul class="nav-content1">
+                    <a href='javascript:;' class="active"><li>基本信息</li></a>
+                    <a href="javascript:;"><li>订单查看</li></a>
+                    <a href="javascript:;"><li>流失客户管理</li></a>
+                </ul>
+                <div class="nav-title" id="nav-title2">权限管理</div>
+                <ul class="nav-content2">
+                    <a href="javascript:;" class="active"><li>用户管理</li></a>
+                </ul>
+                <div class="nav-title" id="nav-title4">服务管理</div>
+                <ul class="nav-content4">
+                    <a href="#" class="active"><li>服务创建</li></a>
+                </ul>
+            </div>
+        </div>
+    </div>
+{{/*    右侧模块*/}}
+    <div class="model-right">
+        <div class="layui-tab-content layui-show" id="changeUrl">
+            <iframe src="{{urlfor "HomeController.Get"}}" frameborder="0" class="x-iframe"></iframe>
+        </div>
+    </div>
+
+    <div>
+</div>
+</div>
+<script>
+    function displayDateTime() {
+        const now = new Date();
+
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const date = String(now.getDate()).padStart(2, '0');
+        const dayOfWeek = now.toLocaleString('default', { weekday: 'long' });
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const seconds = String(now.getSeconds()).padStart(2, '0');
+        document.getElementById('time').textContent = `${year}年${month}月${date}日 ${dayOfWeek} ${hours}:${minutes}:${seconds}`;
+        // 递归调用displayDateTime函数，每秒更新一次时间
+        setTimeout(displayDateTime, 1000);
+    }
+    // 调用displayDateTime函数，开始更新时间
+    displayDateTime();
+
+    function handleSelection() {
+        var select = document.getElementById('mySelect');
+        var selectOption = select.options[select.selectedIndex].value;
+        if (selectOption === "退出登录") {
+            window.location.href = {{urlfor "LoginController.Get"}};
+        }
+    }
+
+    var nav_title1 = document.getElementById('nav-title1');
+    var nav_title2 = document.getElementById('nav-title2');
+    var nav_title4 = document.getElementById('nav-title4');
+    let clicked = false;
+    nav_title1.addEventListener('click', function() {
+        if (!clicked) {
+            document.querySelectorAll(".nav-content1>a").forEach(function(block) {
+                block.style.display = 'block';
+            });
+            clicked = true;
+        } else {
+            document.querySelectorAll(".nav-content1>a").forEach(function(block) {
+                block.style.display = 'none';
+            });
+            clicked = false;
+        }
+    });
+    nav_title2.addEventListener('click', function() {
+        if (!clicked) {
+            document.querySelectorAll(".nav-content2>a").forEach(function(block) {
+                block.style.display = 'block';
+            });
+            clicked = true;
+        } else {
+            document.querySelectorAll(".nav-content2>a").forEach(function(block) {
+                block.style.display = 'none';
+            });
+            clicked = false;
+        }
+    });
+    nav_title4.addEventListener('click', function() {
+        if (!clicked) {
+            document.querySelectorAll(".nav-content4>a").forEach(function(block) {
+                block.style.display = 'block';
+            });
+            clicked = true;
+        } else {
+            document.querySelectorAll(".nav-content4>a").forEach(function(block) {
+                block.style.display = 'none';
+            });
+            clicked = false;
+        }
+    });
+
+    const iframe1 = document.querySelectorAll('.nav-content1>a');
+    const iframe2 = document.querySelectorAll('.nav-content2>a');
+    const iframe3 = document.querySelector('.nav-content4>a');
+    const change_url = document.querySelector('.x-iframe');
+    // const nav_title1 = document.getElementById('nav-title1');
+    // const nav_title2 = document.getElementById('nav-title2');
+    nav_title1.addEventListener('click',function () {
+        change_url.src = '{{urlfor "BasicInfoController.BasicInfo"}}';
+    });
+    iframe1.forEach(x_iframe1 => {
+        x_iframe1.addEventListener('click', () => {
+            iframe1.forEach(c_iframe => {
+                c_iframe.classList.remove('active');
+                if (x_iframe1.textContent === "基本信息") {
+                    x_iframe1.classList.add('active');
+                    change_url.src = '{{urlfor "BasicInfoController.BasicInfo"}}';
+                }
+                if (x_iframe1.textContent === "订单查看") {
+                    x_iframe1.classList.add('active');
+                    change_url.src = '{{urlfor "OrderViewController.OrderView"}}';
+                }
+                if (x_iframe1.textContent === "流失客户管理") {
+                    x_iframe1.classList.add('active');
+                    change_url.src = '{{urlfor "CustLossManageController.Get"}}';
+                }
+            });
+        });
+    });
+    iframe2.forEach(x_iframe2 => {
+        x_iframe2.addEventListener('click', () => {
+            iframe2.forEach(c_iframe => {
+                c_iframe.classList.remove('active');
+                if (x_iframe2.textContent === "用户管理") {
+                    x_iframe2.classList.add('active');
+                    change_url.src = '{{urlfor "UserListController.GetAll"}}';
+                }
+                if (x_iframe2.textContent === "角色管理") {
+                    x_iframe2.classList.add('active');
+                    change_url.src = '{{urlfor "OrderViewController.OrderView"}}';
+                }
+                if (x_iframe2.textContent === "资源管理") {
+                    x_iframe2.classList.add('active');
+                    change_url.src = '{{urlfor "HomeController.Get"}}';
+                }
+            });
+        });
+    });
+    iframe3.addEventListener('click',function () {
+        iframe3.classList.add('active');
+        change_url.src = '{{urlfor "ServiceCreateController.Get"}}';
+    })
+    // 图标跳转
+    const icon_home = document.getElementById('goHome');
+    icon_home.addEventListener('click',function () {
+        change_url.src = '{{urlfor "HomeController.Get"}}';
+    });
+</script>
+</body>
+</html>

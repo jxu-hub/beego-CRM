@@ -1,0 +1,24 @@
+DELETE http://localhost:8080/deleteuser/10
+Content-Type: application/json
+
+###
+PUT http://localhost:8080/updateUser
+Content-Type: application/json
+
+{
+  "id": 6,
+  "Username": "admin6",
+  "Password": "1234"
+}
+
+###
+GET http://localhost:8080/getall
+
+###
+POST http://localhost:8080/page
+Content-Type: application/json
+
+{
+  "pagenum": 0,
+  "pagesize": 2
+}

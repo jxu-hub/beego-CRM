@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            user-select: none;
+        }
+
+        .X-addUserMessage {
+            position: absolute;
+            width: 512px;
+            height: 512px;
+            left: 50%;
+            top: 10%;
+            transform: translate(-50%,-10%);
+            background-color: #fff;
+            z-index: 9999;
+        }
+
+        .X-heard {
+            width: 100%;
+            height: 50px;
+            line-height: 50px;
+        }
+
+        .X-addMessage>div>span {
+            margin-left: 60px;
+        }
+
+        .X-addMessage>div>input {
+            position: absolute;
+            width: 200px;
+            height: 30px;
+            border: solid 1px #ededed;
+            left: 180px;
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+
+        .modifyButton {
+            position: absolute;
+            width: 90px;
+            height: 45px;
+            background-color: #1e9fff;
+            border: none;
+            color: #fff;
+            top: 480px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .modifyButton:hover {
+            width: 100px;
+            height: 50px;
+        }
+    </style>
+</head>
+<body>
+<div class="X-addUserMessage">
+    <div class="X-heard">
+        <div class="X-addMessage">
+            <h1>修改流失客户信息</h1>
+            <div><span>客户姓名</span> <input type="text" id="name" name="name" value=" "></div>
+            <div><span>客户经理</span> <input type="text" id="manager" name="manager" value=" "></div>
+            <div><span>最后下单时间</span> <input type="text" id="time" name="time" value=" "></div>
+            <div><span>流失原因</span> <input type="text" id="reason" name="reason" value=" "></div>
+            <button class="modifyButton" id="modifyBtn">确定修改</button>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $.ajax({
+            url:'/getOneCustLossInfo',
+            type:'Get',
+            dataType:'json',
+            contentType:'application/json',
+            success:function (data) {
+                // 创建一个日期对象
+                var date = new Date(data.lastOrderTime);
+                var options = {
+                    timeZone: 'Asia/Shanghai', // 替换为您所在的时区
+                    year: 'numeric', month: '2-digit', day: '2-digit',
+                };
+                data.LastOrderTime = date.toLocaleString('zh-CN', options);
+                $('#name').val(data.customerName);
+                $('#manager').val(data.customerManage);
+                $('#time').val(data.LastOrderTime);
+                $('#reason').val(data.lossReasons);
+                console.log(data)
+                $('#modifyBtn').click(function () {
+                    const name = $('#name').val();
+                    const manager = $('#manager').val();
+                    const time = $('#time').val();
+                    var isoTime = new Date(time)
+                    var lastOrderTime = isoTime.toISOString();
+                    const reason = $('#reason').val();
+                    console.log("time = ",time)
+                    $.ajax({
+                        url:'/editCustLossInfoPut',
+                        type:'PUT',
+                        dataType:'json',
+                        contentType:'application/json',
+                        data:JSON.stringify({CustomerName:name,CustomerManage:manager,LastOrderTime:lastOrderTime,LossReasons:reason}),
+                        success:function (response) {
+                            alert("返回的数据: " + response.message);
+                            console.log(response)
+// window.location.reload();
+                            parent.location.reload();
+                        },
+                        error:function (xhr,status,error) {
+                            console.log("Error occurred: " + error);
+                        }
+                    })
+                })
+            },
+            error:function (xhr,status,err) {
+                console.log("Error = ",err)
+            }
+        })
+    })
+</script>
+</body>
+</html>

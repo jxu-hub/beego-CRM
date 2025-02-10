@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        .model-right h1 {
+            font-weight: initial;
+            text-align: center;
+            line-height: 710px;
+            font-size: 80px;
+        }
+
+        .animated-text {
+            animation: scaleUpFadeIn 2s;
+            animation-fill-mode: forwards; /* 保留动画结束时的状态 */
+            font-size: 2em; /* 初始字体大小 */
+            opacity: 0; /* 初始透明度 */
+        }
+
+        @keyframes scaleUpFadeIn {
+            from {
+                transform: scale(0); /* 开始时字体大小为0 */
+                opacity: 0; /* 开始时完全透明 */
+            }
+            to {
+                transform: scale(1); /* 结束时字体大小正常 */
+                opacity: 1; /* 结束时完全不透明 */
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="model-right"><h1 class="animated-text">欢迎使用CRM管理系统</h1></div>
+</body>
+</html>

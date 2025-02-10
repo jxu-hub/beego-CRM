@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>用户列表</title>
+    <script src="../static/lib/layui/layui.all.js" charset="utf-8"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            /*去除边框*/
+            border: none;
+            /*去除文字被选中*/
+            user-select: none;
+        }
+
+        a {
+            padding: 0px;
+            margin: 0px;
+            text-decoration: none;
+            color: #000000;
+        }
+
+        /*头部*/
+        .X-heard {
+            width: 1420px;
+            height: 68px;
+            line-height: 68px;
+            background-color: #f2f2f2;
+            border-bottom: #ccc;
+        }
+
+        .user-list {
+            position: absolute;
+            width: 1420px;
+            height: 710px;
+            top: 98px;
+            left: 22px;
+            /*background-color: green;*/
+        }
+
+        .btn-muldelete {
+            width: 76px;
+            height: 36px;
+            margin-left: 18px;
+            background-color: #ff5722;
+            color: #fff;
+            border-radius: 5px;
+        }
+
+        .refresh {
+            width: 34px;
+            height: 36px;
+            margin-left: 10px;
+            margin-top: 10px;
+            background-color: #fff;
+            border-radius: 5px;
+        }
+
+        .big-div-table {
+            width: 1420px;
+            height: 644px;
+        }
+
+        .table {
+            width: 100%;
+            height: 50px;
+            border-collapse: collapse;
+        }
+
+        .form-checkBox {
+            width: 20px;
+            height: 20px;
+            margin: 10px 15px;
+            border: 1px solid #e7e7e7;
+            box-shadow: 0px 0px 20px #ddd;
+            background-color: #fff;
+        }
+
+        .X-littleHeard {
+            width: 1420px;
+            height: 50px;
+            background-color: #f2f2f2;
+            border-bottom: solid 1px #ebebeb;
+        }
+
+        .X-littleHeard>th {
+            /*border-spacing: 0;*/
+            text-align: left;
+            padding-left: 20px;
+            width: 80px;
+            height: 50px;
+            color: #959595;
+            border: solid 1px #ececec;
+        }
+
+        .search {
+            position: absolute;
+            line-height: 98px;
+            left: 575px;
+            font-weight: 500;
+            color: black;
+        }
+
+        .search-username {
+            width: 180px;
+            height: 48px;
+            border: solid 1px #f3f3f3;
+        }
+
+        .search-button {
+            width: 50px;
+            height: 38px;
+            background-color: #1e9fff;
+            color: #fff;
+            border-radius: 5px;
+        }
+
+        .th-modify-btn {
+            height: 28px;
+            line-height: 28px;
+            margin: 10px 0 12px 18px;
+            padding: 2px 5px;
+            color: #fff;
+            background-color: #ffb800;
+            border-radius: 2px;
+            cursor: pointer;
+        }
+
+        .th-delete-btn {
+            height: 28px;
+            line-height: 28px;
+            margin: 10px 0 12px 18px;
+            padding: 2px 5px;
+            color: #fff;
+            background-color: #ff5722;
+            border-radius: 2px;
+            cursor: pointer;
+        }
+
+        .delete {
+            display: none;
+            width: 500px;
+            height: 125px;
+            position: fixed;
+            border: #ebebeb solid 1px;
+            left: 50%;
+            top: 50%;
+            background: #fff;
+            box-shadow: 0 0 20px #ddd;
+            z-index: 999;
+            transform: translate(-50%,-50%);
+        }
+
+        .delete-button {
+            position: absolute;
+            width: 50px;
+            height: 25px;
+            top: 90px;
+            left: 350px;
+            line-height: 25px;
+            font-size: 12px;
+            border: #ebebeb 1px solid;
+            text-align: center;
+        }
+
+        .delete-closeButton {
+            position: absolute;
+            width: 50px;
+            height: 25px;
+            top: 90px;
+            left: 425px;
+            line-height: 25px;
+            font-size: 12px;
+            border: #ebebeb 1px solid;
+            text-align: center;
+        }
+
+        .delete-text {
+            font-size: 18px;
+            padding-left: 30px;
+            line-height: 60px;
+        }
+        .closeBtn {
+            position: absolute;
+            font-size: 12px;
+            /*height: -20px;*/
+            top: -10px;
+            right: -10px;
+            background: #ffffff;
+            border: #ebebeb solid 1px;
+            width: 20px;
+            height: 20px;
+            border-radius: 20px;
+            line-height: 20px;
+            text-align: center;
+        }
+
+        .cursor {
+            cursor: pointer;
+        }
+
+        .pop-up-box {
+            position: absolute;
+            width: 300px;
+            height: 50px;
+            font-size: 14px;
+            top: 40%;
+            left: 30%;
+            transform: translate(40%,30%);
+            text-align: center;
+            background-color: #666666;
+            line-height: 50px;
+            color: #fff;
+            border-radius: 2px;
+            transition: opacity 5s ease-out;
+            animation: fadeOut 5s ease-out forwards;
+        }
+
+        @keyframes fadeOut {
+            0% {opacity: 0;}
+            50% {opacity: 1;}
+            100% {opacity: 0;}
+        }
+
+        #info-tbody>tr {
+            background-color: #fff;
+            border: 1px solid #e7e7e7;
+            box-shadow: 0px 20px 20px #ddd;
+        }
+        .limit>button {
+            /*float: right;*/
+            display: inline-block;
+            background-color: #ccc;
+            margin:10px 10px 0 10px;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .selected-checkbox {
+            background-color: #ff5722; /* 设置选中的复选框的背景颜色 */
+        }
+    </style>
+</head>
+<body>
+<div class="search">
+    <div>搜索客户姓名: &nbsp&nbsp<input type="text" id="search-username" name="username" class="search-username">
+        <button type="button" id="search-button" class="search-button">搜索</button>
+    </div>
+</div>
+<div class="user-list">
+    {{/*    <h1 style="border-bottom: 2px solid #ccc">用户列表</h1>*/}}
+    <div class="userlist-div">
+        <div class="X-heard">
+            <button class="btn-muldelete" onclick="delAll()">删除选中</button>
+            <a href="javascript:location.replace(location.href);" title="刷新" >
+                <button class="refresh">
+                    <svg t="1701348803683" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1483" width="16" height="16">
+                        <path d="M934.4 206.912a31.808 31.808 0 0 0-38.4 23.488l-23.488 87.488A430.784 430.784 0 0 0 497.088 96c-232.576 0-422.4 185.6-422.4 416s189.824 416 422.4 416c179.2 0 339.2-110.912 398.912-275.2 6.4-17.088-2.112-34.112-19.2-40.512-17.088-6.4-34.112 2.112-40.512 19.2-51.2 138.624-187.776 232.512-339.2 232.512-198.4 0-358.4-157.888-358.4-352s162.112-352 358.4-352c145.024 0 277.312 87.488 330.624 217.6l-128-36.288a31.808 31.808 0 1 0-14.912 61.888l185.6 49.088c2.112 0 6.4 2.112 8.512 2.112 6.4 0 10.688-2.112 17.088-4.288 6.4-4.224 12.8-10.624 14.912-19.2l49.088-185.6c0-17.024-8.512-34.112-25.6-38.4z" p-id="1484" fill="#2626ff">
+                        </path>
+                    </svg>
+                </button>
+            </a>
+        </div>
+    </div>
+    <div class="big-div-table">
+        <table class="table">
+            <thead>
+            <tr class="X-littleHeard">
+                <th>
+                    {{/*                    <div class="form-checkBox" onclick="selectAll()"></div>*/}}
+                    <div class="form-checkBox" id="selectAllCheckbox" onclick="toggleSelectAllCheckbox()"></div>
+                </th>
+                <th style="width: 150px">编号</th>
+                <th style="width: 150px">客户编号</th>
+                <th style="width: 150px;">客户姓名</th>
+                <th style="width: 240px;">客户经理</th>
+                <th style="width: 240px;">最后下单时间</th>
+                <th style="width: 420px;">流失原因</th>
+                <th style="width: 200px;">操作</th>
+            </tr>
+            </thead>
+            {{/*        tbody遍历元素*/}}
+            <tbody id="info-tbody"></tbody>
+
+        </table>
+        <div class="limit">
+            <button id="previousPage">上一页</button>
+            <button id="nextPage">下一页</button>
+            <span>共&nbsp{{.count}}&nbsp条</span>
+            <select style="width: 70px;height: 20px;background-color: #cccccc;margin:0 0 0 5px">
+                <option id="countPage" selected></option>
+            </select>
+        </div>
+    </div>
+</div>
+
+<!-- 覆盖层 -->
+<div id="bg" class="modify-bg"></div>
+<div class="pop-up-box">
+    <div>操作成功，共查询到&nbsp{{.count}}&nbsp个流失客户信息</div>
+</div>
+{{/*删除用户*/}}
+<div id="delete" class="delete">
+    <span class="delete-text"></span>
+    <div id="deleteBtn" class="delete-button">确定</div>
+    <div id="delete-cancelBtn" class="delete-closeButton">取消</div>
+    <span class="cursor"><a id="delete-closeBtn" class="closeBtn">╳</a></span>
+</div>
+<script>
+    var pageNum = 1;
+    var pageSize = 10;
+    document.getElementById('countPage').innerText = pageSize + "条/页";
+    $(document).ready(function () {
+        $.ajax({
+            url:'/showCustLossInfoPost',
+            type: 'Post',
+            dataType:'json',
+            contentType:'application/json',
+            success:function () {
+                $('#previousPage').on('click',function () {
+                    pageNum -= 1;
+                    if (pageNum < 1) {
+                        pageNum = 1;
+                        return
+                    }
+                    Limit();
+                })
+                $('#nextPage').on('click',function () {
+                    pageNum += 1;
+                    var count = {{.count}}
+                    var totalPage = Math.ceil(count / pageSize)
+                    if (pageNum > totalPage) {
+                        pageNum = totalPage
+                        return
+                    }
+                    Limit();
+                })
+                Limit();
+            },
+            error:function (xhr,status,err) {
+                console.log("Error = ",err);
+            }
+        })
+    })
+var IdArr = [];
+function Limit() {
+        $('#info-tbody').html(" ");
+        $.ajax({
+            url:'custLossInfoPage',
+            type:'Post',
+            dataType:'json',
+            data:JSON.stringify({Pagenum:pageNum,PageSize:pageSize}),
+            success:function (data) {
+                console.log("data = ",data)
+                console.log("data.data = ",data.data)
+                $.each(data.data,function (index,custLossInfo){
+
+                    // 创建一个日期对象
+                    var date = new Date(custLossInfo.LastOrderTime);
+                    var options = {
+                        timeZone: 'Asia/Shanghai', // 替换为您所在的时区
+                        year: 'numeric', month: '2-digit', day: '2-digit',
+                    };
+                    custLossInfo.LastOrderTime = date.toLocaleString('zh-CN', options);
+                    var checkBox = $('<tr class="X-littleHeard"><th><div class="form-checkBox" onclick="toggleCheckbox(this)"</div></th>').on('click',function () {
+                        $.ajax({
+                            url: "/getDeleteCustLossId/" + custLossInfo.Id,
+                            type: "Get",
+                            success:function () {
+                                console.log(custLossInfo.Id);
+                            }
+                        });
+                    });
+                    var custLossItem = $('<th style="width: 80px;">' + custLossInfo.Id + '</th><th style="width:100px">' + custLossInfo.CustomerID + '</th>' +
+                        '<th style="width:150px">'+custLossInfo.CustomerName+'</th><th style="width:80px">'+custLossInfo.CustomerManager+'</th><th style="width:80px">'+custLossInfo.LastOrderTime + '</th>' +
+                        '<th style="width:100px">'+custLossInfo.LossReasons+'</th></tr>'
+                    );
+                    var editLink = $('<button class="th-modify-btn" onclick="x_admin_show(`修改客户信息`,`editCustLossInfo.html`,700,600)">编辑</button>').on('click',function () {
+                        $.ajax({
+                            url:'/getOneCustLossId/' + custLossInfo.Id,
+                            type:'Get',
+                            dataType:'json',
+                            contentType:'application/json',
+                            success:function (response) {
+                            },
+                            error:function (xhr,status,err) {
+                                console.log("Error = ",err)
+                            }
+                        })
+                    });
+                    var deleteLink = $('<button class="th-delete-btn">删除</button>').on('click',function () {
+                        var link = document.getElementById('delete');
+                        var deleteBtn = document.getElementById('deleteBtn');
+                        var delete_closeBtn = document.getElementById('delete-closeBtn');
+                        var delete_cancelBtn = document.getElementById('delete-cancelBtn');
+                        link.style.display = 'block';
+                        document.querySelector(".delete-text").innerHTML = "是否要删除ID为" + "\"" + custLossInfo.Id + "\"" + "的用户信息 ?";
+                        deleteBtn.addEventListener('click',function () {
+                            $.ajax({
+                                url: "/deleteCustLossHtmlInfo/" + custLossInfo.Id,
+                                type: "DELETE",
+                                success:function () {
+                                    link.style.display = 'none';
+                                    checkBox.remove();
+                                }
+                            });
+                        });
+                        delete_cancelBtn.addEventListener('click',function () {
+                            link.style.display = 'none';
+                            location.replace(location.href)
+                        });
+                        delete_closeBtn.addEventListener('click',function () {
+                            link.style.display = 'none';
+                            location.replace(location.href)
+                        });
+                    });
+                    checkBox.append(custLossItem).append(editLink).append(deleteLink);
+                    $('#info-tbody').append(checkBox);
+                })
+            },
+            error:function (xhr,status,error) {
+                console.log("Error occurred: ",error)
+            }
+        })
+
+}
+    // 搜索客户姓名
+    $('#search-button').click(function () {
+        var searchName = $('#search-username').val();
+        $.ajax({
+            url:'/searchCustLossName',
+            type:'POST',
+            dataType: 'json',
+            contentType: 'application/json',
+            data: JSON.stringify({searchUsername:searchName}),
+            success:function (data) {
+                $('#info-tbody').html(" ");
+                $.each(data,function (index,custLossInfo) {
+                    // 创建一个日期对象
+                    var date = new Date(custLossInfo.LastOrderTime);
+                    var options = {
+                        timeZone: 'Asia/Shanghai', // 替换为您所在的时区
+                        year: 'numeric', month: '2-digit', day: '2-digit',
+                    };
+                    custLossInfo.LastOrderTime = date.toLocaleString('zh-CN', options);
+                    var custLossItem = $('<tr class="X-littleHeard"><th><div class="form-checkBox"></div></th><th style="width: 80px;">' + custLossInfo.Id + '</th><th style="width:100px">' + custLossInfo.CustomerID + '</th>' +
+                        '<th style="width:150px">'+custLossInfo.CustomerName+'</th><th style="width:80px">'+custLossInfo.CustomerManager+'</th><th style="width:80px">'+custLossInfo.LastOrderTime + '</th>' +
+                        '<th style="width:100px">'+custLossInfo.LossReasons+'</th></tr>'
+                    );
+                    var editLink = $('<button class="th-modify-btn" onclick="x_admin_show(`修改客户信息`,`editCustLossInfo.html`,700,600)">编辑</button>').on('click',function () {
+                        $.ajax({
+                            url:'/getOneCustLossId/' + custLossInfo.Id,
+                            type:'Get',
+                            dataType:'json',
+                            contentType:'application/json',
+                            success:function (response) {
+                            },
+                            error:function (xhr,status,err) {
+                                console.log("Error = ",err)
+                            }
+                        })
+                    });
+                    var deleteLink = $('<button class="th-delete-btn">删除</button>').on('click',function () {
+                        var link = document.getElementById('delete');
+                        var deleteBtn = document.getElementById('deleteBtn');
+                        var delete_closeBtn = document.getElementById('delete-closeBtn');
+                        var delete_cancelBtn = document.getElementById('delete-cancelBtn');
+                        link.style.display = 'block';
+                        document.querySelector(".delete-text").innerHTML = "是否要删除ID为" + "\"" + custLossInfo.Id + "\"" + "的用户信息 ?";
+                        deleteBtn.addEventListener('click',function () {
+                            $.ajax({
+                                url: "/deleteCustLossHtmlInfo/" + custLossInfo.Id,
+                                type: "DELETE",
+                                success:function () {
+                                    link.style.display = 'none';
+                                    custLossItem.remove();
+                                }
+                            });
+                        });
+                        delete_cancelBtn.addEventListener('click',function () {
+                            link.style.display = 'none';
+                            location.replace(location.href)
+                        });
+                        delete_closeBtn.addEventListener('click',function () {
+                            link.style.display = 'none';
+                            location.replace(location.href)
+                        });
+                    });
+                    custLossItem.append(editLink).append(deleteLink);
+                    $('#info-tbody').append(custLossItem);
+                });
+            },
+            error:function (xhr,status,err) {
+                console.log("Error = ",err);
+            }
+        })
+    })
+
+    // 删除选中
+    // 切换单个复选框的选中状态
+    function toggleCheckbox(checkboxDiv) {
+        checkboxDiv.classList.toggle('selected-checkbox');
+    }
+    // 切换全选框状态
+    function toggleSelectAllCheckbox() {
+        $('#selectAllCheckbox').toggleClass('selected-checkbox');
+        var isChecked = $('#selectAllCheckbox').hasClass('selected-checkbox');
+
+        // 设置所有复选框的状态
+        $('.form-checkBox').toggleClass('selected-checkbox', isChecked);
+    }
+
+    // 更新全选框状态
+    function updateSelectAllCheckboxState() {
+        var allCheckboxes = $('.form-checkBox');
+        var selectedCheckboxes = $('.form-checkBox.selected-checkbox');
+
+        // 如果所有复选框都被选中，则设置全选框为选中状态，否则取消选中状态
+        $('#selectAllCheckbox').toggleClass('selected-checkbox', allCheckboxes.length === selectedCheckboxes.length);
+    }
+
+
+    function delAll() {
+        $.ajax({
+            url: "/deleteAllCustLossInfo/",
+            type: "DELETE",
+            success:function () {
+// 如果删除成功，则移出对应的列表项
+                window.location.reload();
+            }
+        });
+    }
+    // 添加
+    function x_admin_show(title,url,w,h) {
+        if (w == null || w === '') {
+            w=($(window).width()*0.9);
+        };
+        if (h == null || h === '') {
+            h=($(window).height() - 50);
+        };
+        layer.open({
+            type: 2,
+            area: [w+'px', h +'px'],
+            fix: false, //不固定
+            maxmin: true,
+            shadeClose: true,
+            shade:0.4,
+            content: url,
+            title:title
+        });
+    }
+</script>
+</body>
+</html>

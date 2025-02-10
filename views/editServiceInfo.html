@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            user-select: none;
+        }
+
+        .X-editUserMessage {
+            position: absolute;
+            width: 512px;
+            height: 512px;
+            left: 50%;
+            top: 10%;
+            transform: translate(-50%,-10%);
+            background-color: #fff;
+            z-index: 9999;
+        }
+
+        .X-heard {
+            width: 100%;
+            height: 50px;
+            line-height: 50px;
+        }
+
+        .X-editMessage>div>span {
+            margin-left: 60px;
+        }
+
+        .X-editMessage>div>input {
+            position: absolute;
+            width: 200px;
+            height: 30px;
+            border: solid 1px #ededed;
+            left: 150px;
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+        .X-editMessage>div>select {
+            position: absolute;
+            width: 200px;
+            height: 30px;
+            border: solid 1px #ededed;
+            left: 150px;
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+
+        .modifyButton {
+            position: absolute;
+            width: 90px;
+            height: 45px;
+            background-color: #1e9fff;
+            border: none;
+            color: #fff;
+            top: 480px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .modifyButton:hover {
+            width: 100px;
+            height: 50px;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="X-editUserMessage">
+    <div class="X-heard">
+        <div class="X-editMessage">
+            <h1>修改服务创建</h1>
+            <div><span>服务类型</span> <input type="text" id="serviceName" name="serviceName"></div>
+            <div><span>概要</span> <input type="text" id="outline" name="outline"></div>
+            <div><span>客户编号</span> <input type="text" id="customerId" name="customerId"></div>
+            <div><span>服务状态</span> <select name="status" id="status">
+                    <option selected>已开启服务</option>
+                    <option>未开启服务</option>
+                    <option>正在服务中</option>
+                </select></div>
+            <div><span>服务请求</span> <input type="text" id="request" name="request"></div>
+            <div><span>服务创建人</span> <input type="text" id="username" name="username"></div>
+            <button class="modifyButton" id="modifyBtn">确定修改</button>
+        </div>
+    </div>
+</div>
+<script>
+
+    $(document).ready(function () {
+        $.ajax({
+            url:'/getOneServiceInfo',
+            type:'Post',
+            dataType:'json',
+            contentType: 'application/json',
+            success:function (data) {
+                $('#serviceName').val(data.serviceName);
+                $('#outline').val(data.outline);
+                $('#customerId').val(data.customerID);
+                $('#status').val(data.serviceStatus);
+                $('#request').val(data.serviceRequest);
+                $('#username').val(data.username);
+
+                $('#modifyBtn').click(function () {
+                    const serviceName = $('#serviceName').val();
+                    const outline = $('#outline').val();
+                    const customerId = parseInt($('#customerId').val());
+                    const status = $('#status').val();
+                    const request = $('#request').val();
+                    const username = $('#username').val();
+                    $.ajax({
+                        url:'/serviceCreateEdit',
+                        type:'PUT',
+                        dataType:'json',
+                        contentType:'application/json',
+                        data:JSON.stringify({ServiceName:serviceName,Outline:outline,CustomerID:customerId,ServiceStatus:status,ServiceRequest:request,Username:username}),
+                        success:function (response) {
+                            alert("返回的数据: " + response.message);
+                            console.log(response)
+                            parent.location.reload();
+                        },
+                        error:function (xhr,status,error) {
+                            console.log("Error occurred: " + error);
+                        }
+                    })
+                })
+            },
+            error:function (xhr,status,err) {
+                console.log("Error = ",err)
+            }
+        })
+
+    })
+</script>
+</body>
+</html>
